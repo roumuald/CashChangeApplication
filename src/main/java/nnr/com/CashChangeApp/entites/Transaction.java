@@ -10,7 +10,9 @@ import nnr.com.CashChangeApp.enumeration.TypeTransaction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Date;
+import java.util.Map;
 
 @Entity
 @Setter
@@ -22,10 +24,10 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Double montantSource;
-    private Double montantFinal;
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    private Date transactionDate;
+    private BigDecimal montantSource;
+    private BigDecimal montantFinal;
+    private Instant transactionDate;
+    private Map<String, BigDecimal> exchangeRate;
     @Enumerated(EnumType.STRING)
     private TypeTransaction typeTransaction;
     @Enumerated(EnumType.STRING)
@@ -36,8 +38,6 @@ public class Transaction {
     @JoinColumn(name = "devise_source_id")
     private Devise deviseSource;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "devise_final_id")
-    private Devise deviseFinal;
-
-
+    @JoinColumn(name = "devise_cible_id")
+    private Devise deviseCible;
 }
