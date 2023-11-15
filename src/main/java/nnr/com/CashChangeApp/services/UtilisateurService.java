@@ -1,12 +1,16 @@
 package nnr.com.CashChangeApp.services;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import nnr.com.CashChangeApp.entites.Role;
 import nnr.com.CashChangeApp.entites.Utilisateur;
 import nnr.com.CashChangeApp.entites.Validation;
 import nnr.com.CashChangeApp.exception.CashChangeAppException;
 import nnr.com.CashChangeApp.repository.RoleRepository;
 import nnr.com.CashChangeApp.repository.UtilisateurRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,26 +22,27 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@NoArgsConstructor
 @AllArgsConstructor
-public class UtilisateurService implements InterfaceUtilisateurService {
-    private final UtilisateurRepository utilisateurRepository;
-    private final RoleRepository roleRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final InterfaceValidationService interfaceValidationService;
+public class UtilisateurService implements InterfaceUtilisateurService, UserDetailsService {
+    private  UtilisateurRepository utilisateurRepository;
+    private  RoleRepository roleRepository;
+    private  InterfaceValidationService interfaceValidationService;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public void inscription(Utilisateur utilisateur, Long idRole) {
         Optional<Role> role = roleRepository.findById(idRole);
         if (role.isPresent()) {
-            Utilisateur utilisateurexiste = utilisateurRepository.findByEmail(utilisateur.getEmail());
-            if (utilisateurexiste != null)
+            Optional<Utilisateur> utilisateurexiste = utilisateurRepository.findByEmail(utilisateur.getEmail());
+            if (utilisateurexiste.isEmpty())
                 throw new CashChangeAppException("l'adresse email " + utilisateur.getEmail() + " existe deja veillez renseigner une autre adresse email svp");
             if (!utilisateur.getEmail().contains("@")) throw new CashChangeAppException("Adresse email invalide");
-            String motCripte = bCryptPasswordEncoder.encode(utilisateur.getPassword());
-            utilisateur.setPassword(motCripte);
+            String motDePassCripte = passwordEncoder.encode(utilisateur.getPassword());
+            utilisateur.setPassword(motDePassCripte);
             utilisateur.getRoles().add(role.get());
-            utilisateurexiste = utilisateurRepository.save(utilisateur);
-            this.interfaceValidationService.enregistrer(utilisateurexiste);
+            utilisateurexiste = Optional.of(utilisateurRepository.save(utilisateur));
+            this.interfaceValidationService.enregistrer(utilisateurexiste.get());
         } else {
             throw new CashChangeAppException("La creation d'un utilisateur necessite un role");
         }
@@ -116,11 +121,18 @@ public class UtilisateurService implements InterfaceUtilisateurService {
     }
     @Override
     public Utilisateur loaderUserByEmailUser(String email) {
-        Utilisateur utilisateur = utilisateurRepository.findByEmail(email);
-        if (utilisateur == null) {
+        Optional<Utilisateur> utilisateur = utilisateurRepository.findByEmail(email);
+        if (utilisateur.isEmpty()) {
             throw new CashChangeAppException("Aucun utilisateur avec l'adress " + email);
         }
-        return utilisateur;
+        return utilisateur.get();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<Utilisateur> utilisateur = this.utilisateurRepository.findByEmail(username);
+        if (utilisateur.isEmpty()) throw new CashChangeAppException("Aucun utilisateur ne correspond a cet identifiant");
+        return utilisateur.get();
     }
 }
 

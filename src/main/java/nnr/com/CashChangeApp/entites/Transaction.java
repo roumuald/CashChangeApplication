@@ -27,7 +27,7 @@ public class Transaction {
     private BigDecimal montantSource;
     private BigDecimal montantFinal;
     private Instant transactionDate;
-    private Map<String, BigDecimal> exchangeRate;
+    //private Map<String, BigDecimal> exchangeRate;
     @Enumerated(EnumType.STRING)
     private TypeTransaction typeTransaction;
     @Enumerated(EnumType.STRING)
