@@ -30,6 +30,11 @@ public class UtilisateurService implements InterfaceUtilisateurService, UserDeta
     private  InterfaceValidationService interfaceValidationService;
     private BCryptPasswordEncoder passwordEncoder;
 
+    /**
+     * Methode permet d'enregistrer un nouvel utilisateur
+     * @param utilisateur
+     * @param idRole
+     */
     @Override
     public void inscription(Utilisateur utilisateur, Long idRole) {
         Optional<Role> role = roleRepository.findById(idRole);
@@ -58,7 +63,10 @@ public class UtilisateurService implements InterfaceUtilisateurService, UserDeta
         utilisateur.setActif(true);
         utilisateurRepository.save(utilisateur);
     }
-
+    /**
+     * methode permettant de supprimer un utilisateur
+     * @param id
+     */
     @Override
     public void deteleUser(Long id) {
         Optional<Utilisateur> user = utilisateurRepository.findById(id);
@@ -68,6 +76,12 @@ public class UtilisateurService implements InterfaceUtilisateurService, UserDeta
             throw new CashChangeAppException("pas d'utilisateur avec l'identifiant " + id);
         }
     }
+    /**
+     * Methode pour mise a jour d'un utilisateur deja enregistre
+     * @param id
+     * @param newUser
+     * @return L'utilisateur deja mis a jour
+     */
     @Override
     public Utilisateur updateUser(Long id, Utilisateur newUser) {
         Optional<Utilisateur> user = utilisateurRepository.findById(id);
@@ -81,6 +95,10 @@ public class UtilisateurService implements InterfaceUtilisateurService, UserDeta
             throw new CashChangeAppException("Aucun utilisateur disponible avec l'identifiant " + id);
         }
     }
+    /**
+     * Recupere tous le utilisateur de la base de donnees
+     * @return Liste de Untilisateur
+     */
     @Override
     public List<Utilisateur> getAllUser() {
         List<Utilisateur> utilisateurs = utilisateurRepository.findAll();
@@ -89,7 +107,11 @@ public class UtilisateurService implements InterfaceUtilisateurService, UserDeta
         }
         return utilisateurs;
     }
-
+    /**
+     * Methode pour recuperer un utilisateur
+     * @param id
+     * @return Utilisateur
+     */
     @Override
     public Utilisateur getOneUser(Long id) {
         Optional<Utilisateur> utilisateur = utilisateurRepository.findById(id);
@@ -98,7 +120,11 @@ public class UtilisateurService implements InterfaceUtilisateurService, UserDeta
         }
         return utilisateur.get();
     }
-
+    /**
+     * Methode permet d'ajouter un role a un utilisateur
+     * @param idUser
+     * @param idRole
+     */
     @Override
     public void addRoleToUser(Long idUser, Long idRole) {
         Optional<Utilisateur> utilisateur = utilisateurRepository.findById(idUser);
@@ -109,6 +135,11 @@ public class UtilisateurService implements InterfaceUtilisateurService, UserDeta
             throw new CashChangeAppException("Impossible d'ajouter un role a l'utilisateur");
         }
     }
+    /**
+     * Methode permet de retirer un role a un utilisateur
+     * @param idUser
+     * @param idRole
+     */
     @Override
     public void moveRoleToUser(Long idUser, Long idRole) {
         Optional<Utilisateur> utilisateur = utilisateurRepository.findById(idUser);
@@ -119,6 +150,11 @@ public class UtilisateurService implements InterfaceUtilisateurService, UserDeta
             throw new CashChangeAppException("Impossible de retirer un role a l'utilisateur");
         }
     }
+    /**
+     * Methode pour recupere un utilisateur par son adresse email
+     * @param email
+     * @return Utilisateur
+     */
     @Override
     public Utilisateur loaderUserByEmailUser(String email) {
         Optional<Utilisateur> utilisateur = utilisateurRepository.findByEmail(email);

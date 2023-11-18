@@ -36,6 +36,11 @@ public class DeviseService implements InterfaceDeviseService{
         this.restTemplate = restTemplate;
         this.deviseRepository = deviseRepository;
     }
+
+    /**
+     * récupération des taux de change en temps réel.
+     * @return un objet Devise
+     */
     @Override
     @Cacheable("exchangeRates")
     public ResponseConversionDevise getLatestRates() {
@@ -53,12 +58,24 @@ public class DeviseService implements InterfaceDeviseService{
         // todo Logique pour actualiser les taux de change depuis l'API
         // ...
     }
+
+    /**
+     * l'historique des taux de change permet de savoir la frequence de taux de change
+     * @param date
+     * @return ResponseConversionDevise
+     */
     @Override
     public ResponseConversionDevise getHistoricalRates(String date) {
         String apiUrl = "http://api.currencylayer.com/historical?date=" + date;
         String url = apiUrl + "&access_key=" + apiKey;
         return restTemplate.getForObject(url, ResponseConversionDevise.class);
     }
+
+    /**
+     * enregistrer une nouvelle devise en base de donnees
+     * @param devise
+     * @return Devise enregistree
+     */
     @Override
     public Devise saveCurrency(Devise devise) {
         if (devise==null){
@@ -67,6 +84,13 @@ public class DeviseService implements InterfaceDeviseService{
             return deviseRepository.save(devise);
         }
     }
+
+    /**
+     * mettre a jour une devise
+     * @param id
+     * @param newdevise
+     * @return Devise mis a jour
+     */
     @Override
     public Devise updateCurrency(Long id, Devise newdevise) {
         Optional<Devise> devise = deviseRepository.findById(id);
@@ -79,6 +103,11 @@ public class DeviseService implements InterfaceDeviseService{
             throw new CashChangeAppException("pas de devise avec l'identifiant "+ id);
         }
     }
+
+    /**
+     * suppression de la devise
+     * @param id
+     */
     @Override
     public void deleteCurrency(Long id) {
         Optional<Devise> currency=deviseRepository.findById(id);
@@ -88,6 +117,14 @@ public class DeviseService implements InterfaceDeviseService{
             throw new CashChangeAppException("pas de devise avec l'identifiant "+ id);
         }
     }
+
+    /**
+     * methode de conversion de devise
+     * @param amount
+     * @param sourceCurrency
+     * @param finalCurrency
+     * @return la valeur converti en BigDecimal
+     */
     @Override
     public BigDecimal convertCurrency(BigDecimal amount, Devise sourceCurrency, Devise finalCurrency) {
         ResponseConversionDevise ratesResponse = getLatestRates();
@@ -101,5 +138,4 @@ public class DeviseService implements InterfaceDeviseService{
             return convertedAmount;
         }
     }
-
 }

@@ -14,6 +14,11 @@ import java.util.Optional;
 public class RoleService implements InterfaceRoleService{
     public RoleRepository roleRepository;
 
+    /**
+     * methode permettant d'enregistrer un nouveau role
+     * @param role
+     * @return Role enregistre
+     */
     @Override
     public Role saveRole(Role role) {
         Role roleExist = roleRepository.findByLibelle(role.getLibelle());
@@ -22,6 +27,10 @@ public class RoleService implements InterfaceRoleService{
         return roleExist;
     }
 
+    /**
+     * methode permet de recuperer tous les roles enregistres en base de donnees
+     * @return la liste de role
+     */
     @Override
     public List<Role> getAllRole() {
         List<Role> roles = roleRepository.findAll();
@@ -31,6 +40,13 @@ public class RoleService implements InterfaceRoleService{
             throw new CashChangeAppException("Aucun role disponible en base de donnees");
         }
     }
+
+    /**
+     * methode de mise a jour d'un role
+     * @param id
+     * @param newRole
+     * @return le Role mis a jour
+     */
 
     @Override
     public Role updateRole(Long id, Role newRole) {
@@ -43,6 +59,10 @@ public class RoleService implements InterfaceRoleService{
         throw new CashChangeAppException("Pas de role avec cet identifiant " + id);
     }
 
+    /**
+     * Supression d'un role
+     * @param id
+     */
     @Override
     public void deleteRole(Long id) {
         Optional<Role> role = roleRepository.findById(id);

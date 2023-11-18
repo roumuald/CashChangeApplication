@@ -20,6 +20,14 @@ public class TransactionService implements InterfaceTransactionService{
     private final DeviseRepository deviseRepository;
     private final DeviseService deviseService;
 
+    /**
+     * Methode permettant d'effectuer une nouvelle transaction
+     * @param transaction
+     * @param idUtilisateur
+     * @param idDeviseSource
+     * @param idDeviseCible
+     * @return la Transaction effectuee
+     */
     @Override
     public Transaction recordTransaction(Transaction transaction, Long idUtilisateur, Long idDeviseSource, Long idDeviseCible ) {
         Optional<Utilisateur> utilisateur = utilisateurRepository.findById(idUtilisateur);

@@ -18,6 +18,11 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 public class ValidationService implements InterfaceValidationService{
     private final ValidationRepository validationRepository;
     private final InterfaceNotificationService interfaceNotificationService;
+
+    /**
+     * Methode permet d'enregister un utilisateur avec validation
+     * @param utilisateur
+     */
     @Override
     public void enregistrer(Utilisateur utilisateur) {
         Validation validation = new Validation();
@@ -34,6 +39,11 @@ public class ValidationService implements InterfaceValidationService{
         this.interfaceNotificationService.notification(validation);
     }
 
+    /**
+     * Methode permet d'enregister la validation
+     * @param code
+     * @return Validation
+     */
     @Override
     public Validation getValidationByCode(String code) {
       Validation validation=validationRepository.findByCode(code).orElseThrow(()->new RuntimeException("votre code est invalide"));

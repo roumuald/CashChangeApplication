@@ -23,6 +23,12 @@ import org.springframework.web.client.RestTemplate;
 @EnableWebSecurity
 @EnableCaching
 public class ConfigurationSecuriteCashChangeApplication {
+    private final UserDetailsService userDetailsService;
+
+    public ConfigurationSecuriteCashChangeApplication(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -36,14 +42,14 @@ public class ConfigurationSecuriteCashChangeApplication {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-    @Bean
+    /*@Bean
     public UserDetailsService userDetailsService(){
         return new UtilisateurService();
-    }
+    }*/
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(this.userDetailsService());
+        daoAuthenticationProvider.setUserDetailsService(this.userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(this.passwordEncoder());
         return daoAuthenticationProvider;
     }
