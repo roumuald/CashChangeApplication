@@ -1,11 +1,13 @@
 package nnr.com.CashChangeApp.securite;
 
 import nnr.com.CashChangeApp.services.UtilisateurService;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -22,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 @EnableWebSecurity
 @EnableCaching
+//@Import({SecurityAutoConfiguration.class})
 public class ConfigurationSecuriteCashChangeApplication {
     private final UserDetailsService userDetailsService;
 
@@ -29,7 +32,7 @@ public class ConfigurationSecuriteCashChangeApplication {
         this.userDetailsService = userDetailsService;
     }
 
-    @Bean
+    /*@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                            .csrf(AbstractHttpConfigurer::disable)
@@ -37,7 +40,15 @@ public class ConfigurationSecuriteCashChangeApplication {
                                    authorize->authorize.requestMatchers(HttpMethod.POST, "/cashChangeApplication/**").permitAll()
                                                        .requestMatchers(HttpMethod.POST, "/cashChangeApplication/activation").permitAll()
                                            .anyRequest().authenticated()).build();
+    }*/
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeRequests(authorize -> authorize.anyRequest().permitAll())
+                .build();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();

@@ -5,6 +5,7 @@ import nnr.com.CashChangeApp.entites.Role;
 import nnr.com.CashChangeApp.exception.CashChangeAppException;
 import nnr.com.CashChangeApp.repository.RoleRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -64,9 +65,11 @@ public class RoleService implements InterfaceRoleService{
      * @param id
      */
     @Override
+    @Transactional
     public void deleteRole(Long id) {
         Optional<Role> role = roleRepository.findById(id);
         if (role.isPresent()){
+            roleRepository.deleteById(id);
             roleRepository.delete(role.get());
         }else {
             throw new CashChangeAppException("Pas de role disponible avec l'identifiant "+ id);

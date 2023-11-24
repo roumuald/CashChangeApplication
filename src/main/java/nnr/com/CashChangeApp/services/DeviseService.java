@@ -4,6 +4,7 @@ import nnr.com.CashChangeApp.entites.Devise;
 import nnr.com.CashChangeApp.entites.ResponseConversionDevise;
 import nnr.com.CashChangeApp.exception.CashChangeAppException;
 import nnr.com.CashChangeApp.repository.DeviseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;

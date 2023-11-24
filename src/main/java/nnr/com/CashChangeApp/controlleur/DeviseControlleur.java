@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 @RequestMapping("/cashChangeApplication")
 @AllArgsConstructor
 public class DeviseControlleur {
-    private InterfaceDeviseService interfaceDeviseService;
+    private final InterfaceDeviseService interfaceDeviseService;
     @GetMapping("/latestCurrency")
     @Async
     public CompletableFuture<ResponseConversionDevise> getLatestRates() {
