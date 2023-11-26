@@ -92,7 +92,7 @@ public class DeviseService implements InterfaceDeviseService{
      * @param newdevise
      * @return Devise mis a jour
      */
-    @Override
+  /*  @Override
     public Devise updateCurrency(Long id, Devise newdevise) {
         Optional<Devise> devise = deviseRepository.findById(id);
         if (devise.isPresent()){
@@ -103,7 +103,7 @@ public class DeviseService implements InterfaceDeviseService{
         }else {
             throw new CashChangeAppException("pas de devise avec l'identifiant "+ id);
         }
-    }
+    }*/
 
     /**
      * suppression de la devise
@@ -147,5 +147,14 @@ public class DeviseService implements InterfaceDeviseService{
             throw new CashChangeAppException("Aucune devise disponible en base de donnees");
         }
         return devises;
+    }
+
+    @Override
+    public void saveCurrencyCodes(List<String> currencyCodes) {
+        for (String code : currencyCodes) {
+            Devise devise = new Devise();
+            devise.setCode(code);
+            this.deviseRepository.save(devise);
+        }
     }
 }
