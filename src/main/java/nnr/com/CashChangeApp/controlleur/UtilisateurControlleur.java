@@ -1,5 +1,6 @@
 package nnr.com.CashChangeApp.controlleur;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nnr.com.CashChangeApp.dto.AuthenticationDto;
@@ -70,6 +71,8 @@ public class UtilisateurControlleur {
             Utilisateur utilisateur=this.interfaceUtilisateurService.updateUser(id, newUser);
             return ResponseEntity.ok(utilisateur);
         }catch (CashChangeAppException exception){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity("500", exception.getMessage()));
+        }catch (EntityNotFoundException exception){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ErrorEntity("500", exception.getMessage()));
         }
     }

@@ -73,53 +73,6 @@ public class DeviseService implements InterfaceDeviseService{
     }
 
     /**
-     * enregistrer une nouvelle devise en base de donnees
-     * @param devise
-     * @return Devise enregistree
-     */
-    @Override
-    public Devise saveCurrency(Devise devise) {
-        if (devise==null){
-            throw new CashChangeAppException("les champs sont null");
-        }else {
-            return deviseRepository.save(devise);
-        }
-    }
-
-    /**
-     * mettre a jour une devise
-     * @param id
-     * @param newdevise
-     * @return Devise mis a jour
-     */
-  /*  @Override
-    public Devise updateCurrency(Long id, Devise newdevise) {
-        Optional<Devise> devise = deviseRepository.findById(id);
-        if (devise.isPresent()){
-            devise.get().setId(newdevise.getId());
-            devise.get().setCode(newdevise.getCode());
-            devise.get().setName(newdevise.getName());
-            return deviseRepository.save(devise.get());
-        }else {
-            throw new CashChangeAppException("pas de devise avec l'identifiant "+ id);
-        }
-    }*/
-
-    /**
-     * suppression de la devise
-     * @param id
-     */
-    @Override
-    public void deleteCurrency(Long id) {
-        Optional<Devise> currency=deviseRepository.findById(id);
-        if (currency.isPresent()){
-            deviseRepository.delete(currency.get());
-        }else {
-            throw new CashChangeAppException("pas de devise avec l'identifiant "+ id);
-        }
-    }
-
-    /**
      * methode de conversion de devise
      * @param amount
      * @param sourceCurrency

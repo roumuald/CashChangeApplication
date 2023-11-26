@@ -95,6 +95,8 @@ public class UtilisateurService implements InterfaceUtilisateurService, UserDeta
     public Utilisateur updateUser(Long id, Utilisateur newUser) {
         Optional<Utilisateur> user = utilisateurRepository.findById(id);
         if (user.isPresent()) {
+            Utilisateur utilisateurexiste = utilisateurRepository.findByEmail(newUser.getEmail());
+            if (utilisateurexiste!=null) throw new CashChangeAppException("l'adresse email " + newUser.getEmail() + " existe deja veillez renseigner une autre adresse email svp");
             user.get().setId(newUser.getId());
             user.get().setNom(newUser.getNom());
             user.get().setEmail(newUser.getEmail());

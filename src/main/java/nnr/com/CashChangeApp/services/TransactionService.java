@@ -6,11 +6,13 @@ import nnr.com.CashChangeApp.entites.Transaction;
 import nnr.com.CashChangeApp.entites.Utilisateur;
 import nnr.com.CashChangeApp.exception.CashChangeAppException;
 import nnr.com.CashChangeApp.repository.DeviseRepository;
+import nnr.com.CashChangeApp.repository.TransactionRepository;
 import nnr.com.CashChangeApp.repository.UtilisateurRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,6 +21,7 @@ public class TransactionService implements InterfaceTransactionService{
     private final UtilisateurRepository utilisateurRepository;
     private final DeviseRepository deviseRepository;
     private final DeviseService deviseService;
+    private final TransactionRepository transactionRepository;
 
     /**
      * Methode permettant d'effectuer une nouvelle transaction
@@ -40,9 +43,19 @@ public class TransactionService implements InterfaceTransactionService{
             transaction.setDeviseCible(deviseCible.get());
             transaction.setTransactionDate(Instant.now());
             transaction.setMontantFinal(montant);
-            return transaction;
+
+            return this.transactionRepository.save(transaction);
         }else {
             throw new CashChangeAppException("veillez entrer l'identifiant de l'utilisateur et l'identifiant de la devise ");
         }
+    }
+
+    @Override
+    public List<Transaction> getAllTransaction() {
+        List<Transaction> transactions =this.transactionRepository.findAll();
+        if (transactions.isEmpty()){
+            throw new CashChangeAppException("Aucun transaction disponible en base de donnees");
+        }
+        return transactions;
     }
 }

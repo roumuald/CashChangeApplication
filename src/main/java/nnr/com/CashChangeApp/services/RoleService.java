@@ -53,6 +53,8 @@ public class RoleService implements InterfaceRoleService{
     public Role updateRole(Long id, Role newRole) {
         Optional<Role> role = roleRepository.findById(id);
         if (role.isPresent()){
+            Role roleExist = roleRepository.findByLibelle(newRole.getLibelle());
+            if (roleExist!=null) throw new CashChangeAppException("le Role"+" "+roleExist.getLibelle()+" "+"existe deja !!!");
             role.get().setId(newRole.getId());
             role.get().setLibelle(newRole.getLibelle());
             return roleRepository.save(role.get());

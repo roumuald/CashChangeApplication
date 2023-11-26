@@ -46,6 +46,8 @@ public class RoleControlleur {
             return new ResponseEntity(role, HttpStatus.OK);
         }catch (CashChangeAppException exception){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ErrorEntity("120", exception.getMessage()));
+        }catch (DataIntegrityViolationException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity("500", e.getMessage()));
         }
     }
 
@@ -61,5 +63,4 @@ public class RoleControlleur {
             return new ResponseEntity<>("Impossible de supprimer le rôle en raison de contraintes de clé étrangère", HttpStatus.BAD_REQUEST);
         }
     }
-
 }
