@@ -59,7 +59,7 @@ public class UtilisateurControlleur {
     public ResponseEntity deteleUser(@PathVariable Long id){
         try {
             this.interfaceUtilisateurService.deteleUser(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new CashChangeAppException("Utilisateur supprime avec success"));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ErrorEntity("100", "Utilisateur supprime avec success"));
         }catch (CashChangeAppException exception){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorEntity("502", exception.getMessage()));
         }

@@ -4,7 +4,6 @@ import nnr.com.CashChangeApp.entites.Devise;
 import nnr.com.CashChangeApp.entites.ResponseConversionDevise;
 import nnr.com.CashChangeApp.exception.CashChangeAppException;
 import nnr.com.CashChangeApp.repository.DeviseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -138,5 +138,14 @@ public class DeviseService implements InterfaceDeviseService{
             BigDecimal convertedAmount = amount.multiply(finalCurrencyRate).divide(sourceCurrencyRate, 2, RoundingMode.HALF_UP);
             return convertedAmount;
         }
+    }
+
+    @Override
+    public List<Devise> getAllDevise() {
+        List<Devise> devises = this.deviseRepository.findAll();
+        if (devises.isEmpty()){
+            throw new CashChangeAppException("Aucune devise disponible en base de donnees");
+        }
+        return devises;
     }
 }

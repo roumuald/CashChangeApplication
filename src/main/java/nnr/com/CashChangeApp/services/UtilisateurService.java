@@ -128,8 +128,9 @@ public class UtilisateurService implements InterfaceUtilisateurService, UserDeta
         Optional<Utilisateur> utilisateur = utilisateurRepository.findById(id);
         if (utilisateur.isEmpty()) {
             throw new CashChangeAppException("Aucun utilisateur avec l'identifiant " + id);
+        }else {
+            return utilisateur.get();
         }
-        return utilisateur.get();
     }
 
     /**

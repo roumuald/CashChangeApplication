@@ -4,6 +4,7 @@ import nnr.com.CashChangeApp.entites.Devise;
 import nnr.com.CashChangeApp.entites.ResponseConversionDevise;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface InterfaceDeviseService {
 
@@ -15,4 +16,5 @@ public interface InterfaceDeviseService {
     public Devise updateCurrency(Long id, Devise newdevise);
     public void deleteCurrency(Long id);
     public BigDecimal convertCurrency(BigDecimal amount, Devise sourceCurrency, Devise finalCurrency);
+    public List<Devise> getAllDevise();
 }
